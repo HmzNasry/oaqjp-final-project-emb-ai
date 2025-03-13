@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from EmotionDetection import emotion_detector  
+from EmotionDetection.emotional_detection import emotion_detector
 
 app = Flask(__name__) 
 
@@ -16,7 +16,10 @@ def detect_emotion():
     
     result = emotion_detector(text_to_analyze)  
     dominant_emotion = result.pop("dominant_emotion") 
-    
+
+    if dominant_emotion is None:
+        return "Invalid text! Please try again!", 400
+
     response_text = f"For the given statement, the system response is {result}. The dominant emotion is {dominant_emotion}."
     
     return response_text
